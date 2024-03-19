@@ -3,7 +3,8 @@ import time
 import keyboard
 import cv2
 from tkinter import *
-
+from humancursor import SystemCursor
+cursor = SystemCursor()
 debugg = True
 
 
@@ -20,6 +21,20 @@ def debug():
     nyomni.append('W')
     print(darab, nyomni)
 
+def altab():
+    pyautogui.keyDown('alt')
+    time.sleep(.2)
+    pyautogui.press('tab')
+    time.sleep(.2)
+    pyautogui.keyUp('alt')
+    time.sleep(.2)
+    pyautogui.keyDown('alt')
+    time.sleep(.2)
+    pyautogui.press('tab')
+    time.sleep(.2)
+    pyautogui.keyUp('alt')
+    time.sleep(.2)
+
 
 colors = [[0, 166, 236], [255, 215, 29], [255, 70, 70], [67,234,55]]
 keys = ['W','A','S','D']
@@ -29,9 +44,25 @@ red = [255, 70, 70]
 yellow = [255, 215, 29]
 
 cordinates = []
+petcordinate = []
+choosecordinate = []
+claimcordinate = []
 with open('cordinates.txt','r') as ff:
     for sor in ff:
         cordinates.append(sor.strip().split())
+
+with open('petcordinates.txt','r') as ff:
+    for sor in ff:
+        start_cord = sor.split(':')
+ticketcordinate = start_cord[0].split(',')
+petcordinate = start_cord[1].split(',')
+choosecordinate = start_cord[2].split(',')
+
+with open('claimcordinates.txt','r') as ff:
+    claimcordinate = ff.read().split(',')
+
+
+print(ticketcordinate,petcordinate,choosecordinate)
 
 print(cordinates)
 for adat in range(len(cordinates)):
@@ -86,10 +117,24 @@ while True:
         darab += 1
         print(darab)
     elif darab == 7:
-        reset()
-        keyboard.press('f')
+        time.sleep(10)
+        cursor.move_to([int(claimcordinate[0]), int(claimcordinate[1])])
+        altab()
+        cursor.click_on([int(claimcordinate[0]), int(claimcordinate[1])])
+        time.sleep(2)
+        keyboard.press('e')
         time.sleep(0.01)
-        keyboard.release('f')
+        keyboard.release('e')
+        cursor.move_to([int(ticketcordinate[0]), int(ticketcordinate[1])])
+        altab()
+        cursor.click_on([int(ticketcordinate[0]), int(ticketcordinate[1])])
+        cursor.move_to([int(petcordinate[0]), int(petcordinate[1])])
+        altab()
+        cursor.click_on([int(petcordinate[0]), int(petcordinate[1])])
+        cursor.move_to([int(choosecordinate[0]), int(choosecordinate[1])])
+        altab()
+        cursor.click_on([int(choosecordinate[0]), int(choosecordinate[1])])
+        reset()
 
     else:
         for d in cordinates:
